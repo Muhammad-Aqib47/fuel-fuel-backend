@@ -1,6 +1,8 @@
 const express = require("express");
 require("dotenv").config();
-const userRouters = require("./routes/user-router");
+const buyerRouters = require("./routes/buyer-router");
+const sellerRouters = require("./routes/seller-routers");
+
 const cors = require("cors");
 
 const app = express();
@@ -16,7 +18,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/users", userRouters); // All incoming request on /api/users, will be handled by userRouters
+app.use("/api/buyers",buyerRouters); // All incoming request on /api/users, will be handled by userRouters
+app.use("/api/sellers",sellerRouters); // All incoming request on /api/users, will be handled by userRouters
 
 app.listen(DEV_PORT, () => {
   console.log(`Listening on port: ${DEV_PORT}`);
