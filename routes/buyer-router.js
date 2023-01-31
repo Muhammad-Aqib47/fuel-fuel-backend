@@ -1,6 +1,7 @@
 const express = require("express");
 const { getBuyers,signUp, login} = require("../controllers/buyer-controllers");
 const router = express.Router();
+const auth = require("../middleware/auth")
 
 router.use((req, res, next) => {
   // module for debugging

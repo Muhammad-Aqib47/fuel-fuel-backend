@@ -1,6 +1,6 @@
 const express = require("express");
 const { getsellers, signUp , login} = require("../controllers/seller-controller");
-
+const auth = require("../middleware/auth")
 const router = express.Router();
 
 router.use((req, res, next) => {

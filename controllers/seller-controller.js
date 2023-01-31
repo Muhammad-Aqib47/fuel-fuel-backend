@@ -28,19 +28,18 @@ const getsellers = async (req, res) => {
 };
 const signUp = async (req, res) => {
   try {
-    const { name, email, phone, cnic, passward } = req.body;
+    const { name, email, phone, password } = req.body;
     const checkExistingEmail = await pool.query(checkExistingEmailQuery, [
       email,
     ]);
     if (checkExistingEmail.rows.length != 0) {
       res.status(DUPLICATE_ENTRY_CODE).json(DUPLICATE_ENTRY);
     } else {
-      const hashedPassword = await bcrypt.hash(passward, 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
       await pool.query(createAccountQuery, [
         name,
         email,
         phone,
-        cnic,
         hashedPassword,
       ]);
       return res.status(SUCCESS).json(ACCOUNT_CREATED);
@@ -52,13 +51,15 @@ const signUp = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, passward } = req.body;
+    const { email, password } = req.body;
+    console.log(">>>>>>>>>>>>>>>>",req.body)
+
     const userFind = await pool.query(checkExistingEmailQuery, [email]);
     if (userFind.rows.length == 0) {
       res.json(INCORRECT_CREDENTIALS);
     }
     const hashedPassword = await bcrypt.compare(
-      passward, userFind.rows[0].passward
+      password, userFind.rows[0].passward
     );
     if (hashedPassword === false) {
       res.json(INCORRECT_CREDENTIALS);
@@ -72,9 +73,9 @@ const login = async (req, res) => {
         { expiresIn: 60 * 60 }
       );
       // console.log(id,name)
-      return res.status(SUCCESS).json(token);
+      // return res.status(SUCCESS).json(token);
 
-      // res.status(200).json({message: "succesfuly logged in", token:token , id : foundId, name:foundName})
+      res.status(200).json({message: "succesfuly logged in", token:token , id : foundId, name:foundName})
       // res.json({ message: "succesfuly logged in" });
     }
   } catch (error) {

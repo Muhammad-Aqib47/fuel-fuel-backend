@@ -4,12 +4,13 @@ const jsonwebtoken = require("jsonwebtoken");
 const { SECRET_KEY} = process.env;
 
 
+
 const { API_STATUS_CODES, RESPONSE_MESSAGES,} = require("../constants/constants");
 const { buyersTableQueries } = require("../utils/buyers-queries");
 
 const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } = API_STATUS_CODES;
 
-const { DUPLICATE_ENTRY, ACCOUNT_CREATED ,INCORRECT_CREDENTIALS} = RESPONSE_MESSAGES;
+const { DUPLICATE_ENTRY, ACCOUNT_CREATED ,INCORRECT_CREDENTIALS,LOGGED_IN} = RESPONSE_MESSAGES;
 
 const { getAllBuyers, checkExistingEmailQuery, createAccountQuery } = buyersTableQueries;
 
@@ -23,12 +24,15 @@ const getBuyers = async (req, res) => {
 };
 const signUp = async (req, res) => {
   try {
-    const { name, email, phone, passward } = req.body;
+    console.log("controller>>>>>>>>>>>>>>>>>>", req.body);
+    const { name, email, phone, password } = req.body;
     const checkExistingEmail = await pool.query(checkExistingEmailQuery, [email]);
     if (checkExistingEmail.rows.length != 0) {
       res.status(DUPLICATE_ENTRY_CODE).json(DUPLICATE_ENTRY);
     } else {
-      const hashedPassword = await bcrypt.hash(passward, 10);
+      console.log("inside else", password)
+      const hashedPassword = await bcrypt.hash(password, 10);
+      console.log("hashpassword:>>>>>>>>>>>>>", hashedPassword);
       await pool.query(createAccountQuery, [
         name,
         email,
@@ -43,19 +47,23 @@ const signUp = async (req, res) => {
 };
 const login = async (req, res) => {
   try {
-    const { email, passward } = req.body;
+    const { email, password } = req.body;
     const userFind = await pool.query(checkExistingEmailQuery, [email]);
     if (userFind.rows.length == 0) {
       res.json(INCORRECT_CREDENTIALS);
     }
     const hashedPassword = await bcrypt.compare(
-      passward, userFind.rows[0].passward
+      password, userFind.rows[0].passward
     );
     if (hashedPassword === false) {
-      res.json(INCORRECT_CREDENTIALS);
+      res.json({message:INCORRECT_CREDENTIALS});
     } else {
+      console.log(userFind.rows[0])
       const foundName = userFind.rows[0].name;
       const foundId = userFind.rows[0].id;
+      const foundphone = userFind.rows[0].phone
+      const foundemail = userFind.rows[0].email
+
       const token = jsonwebtoken.sign(
         {},
         // id : foundId,name : foundName
@@ -63,14 +71,17 @@ const login = async (req, res) => {
         { expiresIn: 60 * 60 }
       );
       // console.log(id,name)
-      return res.status(SUCCESS).json(token);
-
-      // res.status(200).json({message: "succesfuly logged in", token:token , id : foundId, name:foundName})
-      // res.json({ message: "succesfuly logged in" });
+      // return res.status(SUCCESS).json({token :token}); 
+    
+     
+      
+      res.status(SUCCESS).json({message : LOGGED_IN, token:token , id :foundId,name : foundName, email:foundemail, phone:foundphone})
+      // res.json(LOGGED_IN);
     }
   } catch (error) {
     console.log(error.message);
   }
 };
+
 
 module.exports = { getBuyers, signUp, login };
