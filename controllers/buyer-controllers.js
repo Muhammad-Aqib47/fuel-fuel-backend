@@ -50,19 +50,19 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const userFind = await pool.query(checkExistingEmailQuery, [email]);
     if (userFind.rows.length == 0) {
-      res.json(INCORRECT_CREDENTIALS);
+      res.json({message:INCORRECT_CREDENTIALS});
     }
     const hashedPassword = await bcrypt.compare(
-      password, userFind.rows[0].passward
+      password, userFind.rows[0].buyer_password
     );
     if (hashedPassword === false) {
       res.json({message:INCORRECT_CREDENTIALS});
     } else {
       console.log(userFind.rows[0])
-      const foundName = userFind.rows[0].name;
-      const foundId = userFind.rows[0].id;
-      const foundphone = userFind.rows[0].phone
-      const foundemail = userFind.rows[0].email
+      const foundName = userFind.rows[0].buyer_name;
+      const foundId = userFind.rows[0].buyer_id;
+      const foundphone = userFind.rows[0].buyer_phone
+      const foundemail = userFind.rows[0].buyer_email
 
       const token = jsonwebtoken.sign(
         {},

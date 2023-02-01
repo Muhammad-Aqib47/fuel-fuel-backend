@@ -9,10 +9,9 @@ const {
 } = require("../constants/constants");
 const { sellersTableQueries } = require("../utils/sellers-queries");
 
-const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } =
-  API_STATUS_CODES;
+const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } = API_STATUS_CODES;
 
-const { DUPLICATE_ENTRY, ACCOUNT_CREATED } = RESPONSE_MESSAGES;
+const { DUPLICATE_ENTRY, ACCOUNT_CREATED ,INCORRECT_CREDENTIALS,LOGGED_IN} = RESPONSE_MESSAGES;
 
 const { getAllSellers, checkExistingEmailQuery, createAccountQuery } =
   sellersTableQueries;
@@ -29,9 +28,7 @@ const getsellers = async (req, res) => {
 const signUp = async (req, res) => {
   try {
     const { name, email, phone, password } = req.body;
-    const checkExistingEmail = await pool.query(checkExistingEmailQuery, [
-      email,
-    ]);
+    const checkExistingEmail = await pool.query(checkExistingEmailQuery, [email]);
     if (checkExistingEmail.rows.length != 0) {
       res.status(DUPLICATE_ENTRY_CODE).json(DUPLICATE_ENTRY);
     } else {
@@ -59,13 +56,16 @@ const login = async (req, res) => {
       res.json(INCORRECT_CREDENTIALS);
     }
     const hashedPassword = await bcrypt.compare(
-      password, userFind.rows[0].passward
+      password, userFind.rows[0].seller_password
     );
     if (hashedPassword === false) {
       res.json(INCORRECT_CREDENTIALS);
     } else {
-      const foundName = userFind.rows[0].name;
-      const foundId = userFind.rows[0].id;
+      console.log(userFind.rows[0])
+      const foundName = userFind.rows[0].seller_name;
+      const foundId = userFind.rows[0].seller_id;
+      const foundphone = userFind.rows[0].seller_phone
+      const foundemail = userFind.rows[0].seller_email
       const token = jsonwebtoken.sign(
         {},
         // id : foundId,name : foundName
@@ -75,8 +75,9 @@ const login = async (req, res) => {
       // console.log(id,name)
       // return res.status(SUCCESS).json(token);
 
-      res.status(200).json({message: "succesfuly logged in", token:token , id : foundId, name:foundName})
       // res.json({ message: "succesfuly logged in" });
+      res.status(SUCCESS).json({message : LOGGED_IN, token:token , id :foundId,name : foundName, email:foundemail, phone:foundphone})
+
     }
   } catch (error) {
     console.log(error.message);
