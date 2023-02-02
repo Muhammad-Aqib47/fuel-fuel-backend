@@ -1,7 +1,7 @@
 const express = require("express");
 const { getBuyers,signUp, login} = require("../controllers/buyer-controllers");
 const router = express.Router();
-const auth = require("../middleware/auth")
+const buyerAuth = require("../middleware/buyer-auth")
 
 router.use((req, res, next) => {
   // module for debugging
@@ -9,7 +9,7 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get("/b", getBuyers);
+router.get("/b", buyerAuth, getBuyers);
 router.post("/signup", signUp);
 router.post("/login", login);
 

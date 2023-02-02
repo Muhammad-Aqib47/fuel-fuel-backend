@@ -4,7 +4,6 @@ const buyerRouters = require("./routes/buyer-router");
 const sellerRouters = require("./routes/seller-routers");
 
 const cors = require("cors");
-// const auth = require("./middleware/auth");
 
 const app = express();
 const { DEV_PORT } = process.env;
@@ -12,7 +11,6 @@ const { DEV_PORT } = process.env;
 // Middlewares
 app.use(cors()); // This middleware allows CROSS ORIGIN RESOURCE SHARING
 app.use(express.json()); // This middleware parses incoming requests with JSON payloads
-// app.use(auth)
 app.use((req, res, next) => {
   // module for debugging
   console.log("Request arrived to backend server");
