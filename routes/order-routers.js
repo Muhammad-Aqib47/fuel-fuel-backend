@@ -1,10 +1,14 @@
 const express = require('express')
-const { getBuyerOrder, createOrder } = require('../controllers/order-controllers')
-
 const router = express.Router()
+const { getBuyerOrder, createOrder, cancelYourOrder } = require('../controllers/order-controllers')
+
 
 router.get("/getBuyerOrderStatus", getBuyerOrder)
 
 router.post('/', createOrder)
+
+router.delete('/:id', cancelYourOrder)
+
+
 
 module.exports = router

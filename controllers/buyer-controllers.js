@@ -16,8 +16,9 @@ const getCities = async (req, res) => {
 
 // Get sellers Station according to cities
 const getSellers = async (req, res) => {
+  const { cityName } = req.params;
   try {
-    const result = await pool.query(getSellersStations, ['peshawar']);
+    const result = await pool.query(getSellersStations, [cityName]);
     res.status(200).json(result.rows);
   } catch (error) {
     res.status(200).json({ message: error });
@@ -27,8 +28,9 @@ const getSellers = async (req, res) => {
 
 //Filter Fuel Type According to Sellers
 const getFuelType = async (req, res) => {
+  const { fuelType } = req.params;
   try {
-    const result = await pool.query(getFuelTypeFromSellers, ['saddar road str.12']);
+    const result = await pool.query(getFuelTypeFromSellers, [fuelType]);
     res.status(200).json(result.rows);
   } catch (error) {
     res.status(200).json({ message: error });
@@ -38,8 +40,9 @@ const getFuelType = async (req, res) => {
 
 //get Fuel price according to Fuel type
 const getFuelPrice = async (req, res) => {
+  const { fuelPrice } = req.params;
   try {
-    const result = await pool.query(getFuelPriceFromSellers, ['petrol']);
+    const result = await pool.query(getFuelPriceFromSellers, [fuelPrice]);
     res.status(200).json(result.rows);
   } catch (error) {
     res.status(200).json({ message: error });
