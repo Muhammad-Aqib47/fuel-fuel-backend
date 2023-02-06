@@ -1,6 +1,6 @@
 const buyerTableQueries = {
 
-  // Filter Cities from sellers that where sellers are Available
+  // Get Cities from sellers that where sellers are Available
   getCitiesData: "SELECT seller_city FROM sellers",
 
 
