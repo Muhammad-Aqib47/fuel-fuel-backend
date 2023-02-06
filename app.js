@@ -2,9 +2,10 @@ const express = require("express");
 require("dotenv").config();
 const buyerRouters = require("./routes/buyer-router");
 const sellerRouters = require("./routes/seller-routers");
+const userRouters = require("./routes/user-router");
+
 
 const cors = require("cors");
-
 const app = express();
 const { DEV_PORT } = process.env;
 
@@ -16,7 +17,7 @@ app.use((req, res, next) => {
   console.log("Request arrived to backend server");
   next();
 });
-
+app.use("/api/users", userRouters); // All incoming
 app.use("/api/buyers",buyerRouters); // All incoming request on /api/users, will be handled by userRouters
 app.use("/api/sellers",sellerRouters); // All incoming request on /api/users, will be handled by userRouters
 
