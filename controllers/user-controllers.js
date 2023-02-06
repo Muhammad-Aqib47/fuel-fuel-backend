@@ -2,7 +2,7 @@ const { usersTableQueries } = require("../utils/user-queries");
 const {pool} = require("../connections/postgre");
 const { createUserQueries } = usersTableQueries;
 
-const createquery = async(req, res)=>{
+const createQuery = async(req, res)=>{
   const{name, email, query} =req.body;
  
   try{
@@ -15,4 +15,4 @@ const createquery = async(req, res)=>{
   }
 };
 
-module.exports = { createquery };
+module.exports = { createQuery };
