@@ -19,14 +19,17 @@ const sellerAuth = async (req, res, next) => {
       let payLoad = jwt.verify(token, process.env.SECRET_KEY);
       const sellerData = await pool.query(getSellerDetails, [payLoad.seller_id]);
       console.log(sellerData.rows[0].seller_name);
+      next();
     } else {
       res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
     }
-    next();
   } catch (error) {
     console.log(error);
-    res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
+    if (!res.headersSent) {
+      res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
+    }
   }
 };
 
 module.exports = sellerAuth;
+

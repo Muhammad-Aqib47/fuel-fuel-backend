@@ -13,19 +13,18 @@ const { AUTHORIZATION_FAILED } = RESPONSE_MESSAGES;
 
 const buyerAuth = async (req, res, next) => {
   try {
-    let token = req.headers.authorization;
+    let token = req.headers.authorization?.split(" ")[1];
     if (token) {
-      token = token.split(" ")[1];
-      let payLoad = jwt.verify(token, process.env.SECRET_KEY);
+      const payLoad = jwt.verify(token, process.env.SECRET_KEY);
+      console.log(payLoad)
       const buyerData = await pool.query(getBuyerDetails, [payLoad.buyer_id]);
-      console.log(buyerData.rows[0].buyer_name);
+      req.buyer = buyerData.rows[0];
+      next();
     } else {
-      res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
+      return res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
     }
-    next();
   } catch (error) {
-    console.log(error);
-    res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
+    return res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
   }
 };
 

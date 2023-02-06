@@ -15,20 +15,11 @@ const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } =
 const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN } =
   RESPONSE_MESSAGES;
 
-const { getAllBuyers, checkExistingEmailQuery, createAccountQuery } =
+const {checkExistingEmailQuery, createAccountQuery } =
   buyersTableQueries;
 
-const getBuyers = async (req, res) => {
-  try {
-    const result = await pool.query(getAllBuyers);
-    res.status(SUCCESS).json(result.rows);
-  } catch (error) {
-    throw error;
-  }
-};
 const signUp = async (req, res) => {
   try {
-    console.log("controller>>>>>>>>>>>>>>>>>>", req.body);
     const { name, email, phone, password } = req.body;
     const checkExistingEmail = await pool.query(checkExistingEmailQuery, [
       email,
@@ -36,9 +27,7 @@ const signUp = async (req, res) => {
     if (checkExistingEmail.rows.length != 0) {
       res.status(DUPLICATE_ENTRY_CODE).json(DUPLICATE_ENTRY);
     } else {
-      console.log("inside else", password);
       const hashedPassword = await bcrypt.hash(password, 10);
-      console.log("hashpassword:>>>>>>>>>>>>>", hashedPassword);
       await pool.query(createAccountQuery, [
         name,
         email,
@@ -65,35 +54,34 @@ const login = async (req, res) => {
     if (hashedPassword === false) {
       res.json({ message: INCORRECT_CREDENTIALS });
     } else {
-      console.log(">>>>>found buyer>>>>>>", userFind.rows[0]);
-      const foundName = userFind.rows[0].buyer_name;
       const foundId = userFind.rows[0].buyer_id;
-      const foundphone = userFind.rows[0].buyer_phone;
-      const foundemail = userFind.rows[0].buyer_email;
       const token = jsonwebtoken.sign(
         { buyer_id: foundId },
-        // id : foundId,name : foundName
         SECRET_KEY,
         { expiresIn: 60 * 60 }
       );
-      // console.log(id,name)
-      // return res.status(SUCCESS).json({token :token});
 
       res
         .status(SUCCESS)
         .json({
           message: LOGGED_IN,
           token: token,
-          id: foundId,
-          name: foundName,
-          email: foundemail,
-          phone: foundphone,
         });
-      // res.json(LOGGED_IN);
     }
   } catch (error) {
     console.log(error.message);
   }
 };
+const validateBuyer =async (req,res) => {
 
-module.exports = { getBuyers, signUp, login };
+  try {
+    const buyer = req.buyer;
+    console.log(buyer);
+    res.json(buyer)
+
+  } catch (error) {
+    console.log(error.message)
+  }
+
+}
+module.exports = {signUp, login, validateBuyer };

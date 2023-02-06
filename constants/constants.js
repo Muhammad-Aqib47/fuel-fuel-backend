@@ -8,12 +8,12 @@ const API_STATUS_CODES = {
 };
 const RESPONSE_MESSAGES = {
   SUCCESS: "Success",
-  ACCOUNT_CREATED :"account created successfuly",
+  ACCOUNT_CREATED :"Account created successfuly",
   AUTHORIZATION_FAILED: "Authorization failed",
-  DUPLICATE_ENTRY: "email already exist.",
-  LOGGED_IN: "succesfuly logged in",
-  MEAL_ADDED: "meal added successfully",
-  INCORRECT_CREDENTIALS :"inavlid email or passward"
+  DUPLICATE_ENTRY: "Email already exist.",
+  LOGGED_IN: "Succesfuly logged in",
+  MEAL_ADDED: "Meal added successfully",
+  INCORRECT_CREDENTIALS :"Inavlid email or passward"
   
 };
 
