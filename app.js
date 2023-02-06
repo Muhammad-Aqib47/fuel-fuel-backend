@@ -1,13 +1,13 @@
 const express = require("express");
-require("dotenv").config();
-const buyerRouters = require("./routes/buyer-router");
+let cors = require("cors");
+const app = express();
+const buyerRouters = require('./routes/buyer-router')
+const ordersRouter = require('./routes/order-routers')
 const sellerRouters = require("./routes/seller-routers");
+
 const userRouters = require("./routes/user-router");
 
-
-const cors = require("cors");
-const app = express();
-const { DEV_PORT } = process.env;
+require('dotenv').config();
 
 // Middlewares
 app.use(cors()); // This middleware allows CROSS ORIGIN RESOURCE SHARING
@@ -18,9 +18,13 @@ app.use((req, res, next) => {
   next();
 });
 app.use("/api/users", userRouters); // All incoming
-app.use("/api/buyers",buyerRouters); // All incoming request on /api/users, will be handled by userRouters
-app.use("/api/sellers",sellerRouters); // All incoming request on /api/users, will be handled by userRouters
+app.use("/api/buyers", buyerRouters); // All incoming request on /api/users, will be handled by userRouters
+app.use("/api/sellers", sellerRouters); // All incoming request on /api/users, will be handled by userRouters
+app.use('/api/orders', ordersRouter);
 
-app.listen(DEV_PORT, () => {
-  console.log(`Listening on port: ${DEV_PORT}`);
+
+
+let PORT = process.env.DEV_PORT;
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}...`);
 });

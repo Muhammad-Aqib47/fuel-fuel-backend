@@ -3,11 +3,11 @@ const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 
-const {
-  API_STATUS_CODES,
-  RESPONSE_MESSAGES,
-} = require("../constants/constants");
+const { API_STATUS_CODES, RESPONSE_MESSAGES, } = require("../constants/constants");
 const { sellersTableQueries } = require("../utils/sellers-queries");
+
+const { getAllSellers, checkExistingEmailQuery, createAccountQuery } = sellersTableQueries;
+
 
 const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } =
   API_STATUS_CODES;
@@ -15,8 +15,6 @@ const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } =
 const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN } =
   RESPONSE_MESSAGES;
 
-const { getAllSellers, checkExistingEmailQuery, createAccountQuery } =
-  sellersTableQueries;
 
 const getsellers = async (req, res) => {
   try {

@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const pool = require("../connections/postgre");
-const { buyersTableQueries } = require("../utils/buyers-queries");
-const { getBuyerDetails } = buyersTableQueries;
+const { buyerTableQueries } = require("../utils/buyer-queries");
+const { getBuyerDetails } = buyerTableQueries;
 const {
   API_STATUS_CODES,
   RESPONSE_MESSAGES,

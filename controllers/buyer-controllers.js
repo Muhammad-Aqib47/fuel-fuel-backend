@@ -1,13 +1,61 @@
-const pool = require("../connections/postgre");
+const { pool } = require("../connections/postgre");
+const { buyerTableQueries } = require('../utils/buyer-queries')
+const { getCitiesData, getSellersStations, getFuelTypeFromSellers, getFuelPriceFromSellers, checkExistingEmailQuery, createAccountQuery } = buyerTableQueries;
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
+
+//get Cities that where sellers are Available
+const getCities = async (req, res) => {
+  try {
+    const result = await pool.query(getCitiesData);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(200).json({ message: error });
+  }
+};
+
+
+// Get sellers Station according to cities
+const getSellers = async (req, res) => {
+  const { cityName } = req.params;
+  try {
+    const result = await pool.query(getSellersStations, [cityName]);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(200).json({ message: error });
+  }
+};
+
+
+//Filter Fuel Type According to Sellers
+const getFuelType = async (req, res) => {
+  const { fuelType } = req.params;
+  try {
+    const result = await pool.query(getFuelTypeFromSellers, [fuelType]);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(200).json({ message: error });
+  }
+};
+
+
+//get Fuel price according to Fuel type
+const getFuelPrice = async (req, res) => {
+  const { fuelPrice } = req.params;
+  try {
+    const result = await pool.query(getFuelPriceFromSellers, [fuelPrice]);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(200).json({ message: error });
+  }
+};
+
 
 const {
   API_STATUS_CODES,
   RESPONSE_MESSAGES,
 } = require("../constants/constants");
-const { buyersTableQueries } = require("../utils/buyers-queries");
 
 const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } =
   API_STATUS_CODES;
@@ -15,8 +63,6 @@ const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } =
 const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN } =
   RESPONSE_MESSAGES;
 
-const {checkExistingEmailQuery, createAccountQuery } =
-  buyersTableQueries;
 
 const signUp = async (req, res) => {
   try {
@@ -72,7 +118,7 @@ const login = async (req, res) => {
     console.log(error.message);
   }
 };
-const validateBuyer =async (req,res) => {
+const validateBuyer = async (req, res) => {
 
   try {
     const buyer = req.buyer;
@@ -84,4 +130,6 @@ const validateBuyer =async (req,res) => {
   }
 
 }
-module.exports = {signUp, login, validateBuyer };
+
+
+module.exports = { getCities, getSellers, getFuelType, getFuelPrice, signUp, login, validateBuyer };
