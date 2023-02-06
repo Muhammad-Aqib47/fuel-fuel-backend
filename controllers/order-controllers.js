@@ -1,7 +1,7 @@
-const { buyerOrderTableQueries } = require('../utils/order-queries')
+const { buyerTableQueries } = require('../utils/order-queries')
 const { pool } = require('../connections/postgre')
 
-const { getBuyerOrderStatus, placeOrder, cancelOrder } = buyerOrderTableQueries
+const { getBuyerOrderStatus, placeOrder, cancelOrder } = buyerTableQueries
 
 // Create order from buyer
 const createOrder = async (req, res) => {
