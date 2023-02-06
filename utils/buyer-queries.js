@@ -16,9 +16,6 @@ const buyerTableQueries = {
   getFuelPriceFromSellers: "SELECT products.fuel_price FROM sellers INNER JOIN products ON products.seller_id = sellers.seller_id where products.product_name = $1 ",
 
 
-  //Filter fuel price according fuel type
-  // getFuelPriceFromSellers: "SELECT products.fuel_price from products WHERE products.product_name = $1 AND products.seller_id = $2",
-
 
 
 
