@@ -12,11 +12,7 @@ require('dotenv').config();
 // Middlewares
 app.use(cors()); // This middleware allows CROSS ORIGIN RESOURCE SHARING
 app.use(express.json()); // This middleware parses incoming requests with JSON payloads
-app.use((req, res, next) => {
-  // module for debugging
-  console.log("Request arrived to backend server");
-  next();
-});
+
 app.use("/api/users", userRouters); // All incoming
 app.use("/api/buyers", buyerRouters); // All incoming request on /api/users, will be handled by userRouters
 app.use("/api/sellers", sellerRouters); // All incoming request on /api/users, will be handled by userRouters

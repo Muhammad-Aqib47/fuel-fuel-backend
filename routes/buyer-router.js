@@ -4,11 +4,7 @@ const buyerAuth = require("../middleware/buyer-auth")
 
 const router = express.Router()
 
-router.use((req, res, next) => {
-    // module for debugging
-    console.log("Request arrived in buyers routers");
-    next();
-});
+
 
 router.post("/signup", signUp);
 router.post("/login", login);
