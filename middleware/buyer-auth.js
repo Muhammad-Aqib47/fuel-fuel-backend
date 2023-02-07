@@ -16,9 +16,8 @@ const buyerAuth = async (req, res, next) => {
     let token = req.headers.authorization?.split(" ")[1];
     if (token) {
       const payLoad = jwt.verify(token, process.env.SECRET_KEY);
-      console.log(payLoad)
-      const buyerData = await pool.query(getBuyerDetails, [payLoad.buyer_id]);
-      req.buyer = buyerData.rows[0];
+      const getAuthBuyerId = payLoad.buyer_id
+      req.buyer = getAuthBuyerId
       next();
     } else {
       return res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);

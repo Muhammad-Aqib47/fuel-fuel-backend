@@ -1,6 +1,6 @@
 const { pool } = require("../connections/postgre");
 const { buyerTableQueries } = require('../utils/buyer-queries')
-const { getCitiesData, getSellersStations, getFuelTypeFromSellers, getFuelPriceFromSellers, checkExistingEmailQuery, createAccountQuery } = buyerTableQueries;
+const { getCitiesData, getSellersStations, getFuelTypeFromSellers, getFuelPriceFromSellers, checkExistingEmailQuery, createAccountQuery ,getBuyerDetails} = buyerTableQueries;
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
@@ -121,9 +121,9 @@ const login = async (req, res) => {
 const validateBuyer = async (req, res) => {
 
   try {
-    const buyer = req.buyer;
-    console.log(buyer);
-    res.json(buyer)
+    const authBuyerId= req.buyer;
+    const buyerData = await pool.query(getBuyerDetails, [authBuyerId]);
+    res.json(buyerData.rows[0])
 
   } catch (error) {
     console.log(error.message)
