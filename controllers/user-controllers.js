@@ -1,19 +1,18 @@
-const pool = require("../connections/postgre");
-const { API_STATUS_CODES } = require("../constants/constants");
-const { usersTableQueries } = require("../utils/queries");
+const { usersTableQueries } = require("../utils/user-queries");
+const {pool} = require("../connections/postgre");
+const { createUserQueries } = usersTableQueries;
 
-const { SUCCESS, NOT_FOUND, AUTHORIZATION_FAILED } = API_STATUS_CODES;
-const { getAllUsersQuery } = usersTableQueries;
+const createQuery = async(req, res)=>{
+  const{name, email, query} =req.body;
+ 
+  try{
+    const result = await pool.query(createUserQueries,[name, email, query])  
+    res.status(200).json({message: "You query has been received."});
 
-const getAllUsers = async (req, res) => {
-  console.log("Request arrived in getAllUsers controllers");
-  try {
-    const result = await pool.query(getAllUsersQuery);
-    console.log("result here", result);
-    res.status(SUCCESS).json(result.rows);
-  } catch (error) {
-    throw error;
+  }
+  catch(error){
+     res.json({message: error});
   }
 };
 
-module.exports = { getAllUsers };
+module.exports = { createQuery };
