@@ -1,16 +1,20 @@
 const API_STATUS_CODES = {
   SUCCESS: 200,
   NOT_FOUND: 404,
-  AUTHORIZATION_FAILED: 401,
+  AUTHORIZATION_FAILED_CODE: 401,
   ERROR_CODE: 400,
   INTERNAL_SERVER_ERROR: 500,
-  DUPLICATE_ENTRY: 11000,
+  DUPLICATE_ENTRY_CODE: 400,
 };
 const RESPONSE_MESSAGES = {
   SUCCESS: "Success",
+  ACCOUNT_CREATED: "Account created successfuly",
   AUTHORIZATION_FAILED: "Authorization failed",
-  DUPLICATE_ENTRY: "email already exist.",
-  MEAL_ADDED: "meal added successfully",
+  DUPLICATE_ENTRY: "Email already exist.",
+  LOGGED_IN: "Succesfuly logged in",
+  MEAL_ADDED: "Meal added successfully",
+  INCORRECT_CREDENTIALS: "Inavlid email or passward"
+
 };
 
 const APP_ENVIRONMENTS = {
