@@ -1,5 +1,5 @@
 const express = require("express");
-const { getsellers, signUp, login } = require("../controllers/seller-controller");
+const { getsellers, signUp, login, getBuyerOrders } = require("../controllers/seller-controller");
 const sellerAuth = require("../middleware/seller-auth")
 const router = express.Router();
 
