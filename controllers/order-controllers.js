@@ -1,7 +1,7 @@
 const { buyerTableQueries } = require('../utils/order-queries')
 const { pool } = require('../connections/postgre')
 
-const { getBuyerOrderStatus, placeOrder, cancelOrder } = buyerTableQueries
+const { getBuyerOrderStatus, placeOrder, cancelOrder, getBuyerOrdersData } = buyerTableQueries
 
 // Create order from buyer
 const createOrder = async (req, res) => {
@@ -37,5 +37,14 @@ const cancelYourOrder = async (req, res) => {
     }
 }
 
+//get orders from buyers for sellers
+const getBuyerOrders = async (req, res) => {
+    try {
+        const result = await pool.query(getBuyerOrdersData);
+        res.status(200).json(result.rows);
+    } catch (error) {
+        res.status(200).json({ message: 'failed' });
+    }
+};
 
-module.exports = { getBuyerOrder, createOrder, cancelYourOrder };
+module.exports = { getBuyerOrder, createOrder, cancelYourOrder, getBuyerOrders };

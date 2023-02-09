@@ -87,4 +87,7 @@ const login = async (req, res) => {
   }
 };
 
+
+
+
 module.exports = { getsellers, signUp, login };
