@@ -3,13 +3,17 @@ const { pool } = require('../connections/postgre')
 
 const { getBuyerOrderStatus, placeOrder, cancelOrder, getBuyerOrdersData, updateBuyerOrder } = buyerTableQueries
 
+const { API_STATUS_CODES } = require("../constants/constants");
+
+const { SUCCESS } = API_STATUS_CODES;
+
 // Create order from buyer
 const createOrder = async (req, res) => {
     const { name, selectCity, selectSeller, selectFueltype, fuelPrice, fuelQuantity, fuelDeliveryAddress, phoneNumber, selectPaymentMethod } = req.body;
 
     try {
         const result = await pool.query(placeOrder, [name, selectCity, selectSeller, selectFueltype, fuelPrice, fuelQuantity, fuelDeliveryAddress, phoneNumber, selectPaymentMethod]);
-        res.status(200).json({ message: "Your Order has been successfully done" });
+        res.status(SUCCESS).json({ message: "Your Order has been successfully done" });
     } catch (error) {
         res.json({ message: error });
     }
@@ -19,9 +23,9 @@ const createOrder = async (req, res) => {
 const getBuyerOrder = async (req, res) => {
     try {
         const result = await pool.query(getBuyerOrderStatus);
-        res.status(200).json(result.rows);
+        res.status(SUCCESS).json(result.rows);
     } catch (error) {
-        res.status(200).json({ message: error });
+        res.status(SUCCESS).json({ message: error });
     }
 };
 
@@ -31,9 +35,9 @@ const cancelYourOrder = async (req, res) => {
     const { id } = req.params;
     try {
         const result = await pool.query(cancelOrder, [id]);
-        res.status(200).json(result);
+        res.status(SUCCESS).json(result);
     } catch (error) {
-        res.status(200).json({ message: error })
+        res.status(SUCCESS).json({ message: error })
     }
 }
 
@@ -41,9 +45,9 @@ const cancelYourOrder = async (req, res) => {
 const getBuyerOrders = async (req, res) => {
     try {
         const result = await pool.query(getBuyerOrdersData);
-        res.status(200).json(result.rows);
+        res.status(SUCCESS).json(result.rows);
     } catch (error) {
-        res.status(200).json({ message: 'failed' });
+        res.status(SUCCESS).json({ message: 'failed' });
     }
 };
 
@@ -54,9 +58,9 @@ const updateOrder = async (req, res) => {
     console.log(order_status)
     try {
         const result = await pool.query(updateBuyerOrder, [order_status, id])
-        res.status(200).json(result)
+        res.status(SUCCESS).json(result)
     } catch (error) {
-        res.status(200).json({ message: error })
+        res.status(SUCCESS).json({ message: error })
 
     }
 }

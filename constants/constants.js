@@ -13,7 +13,7 @@ const RESPONSE_MESSAGES = {
   DUPLICATE_ENTRY: "Email already exist.",
   LOGGED_IN: "Succesfuly logged in",
   MEAL_ADDED: "Meal added successfully",
-  INCORRECT_CREDENTIALS: "Inavlid email or passward"
+  INCORRECT_CREDENTIALS: "Inavlid email or passward",
 
 };
 
