@@ -5,13 +5,20 @@ const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 
+const { API_STATUS_CODES, RESPONSE_MESSAGES } = require("../constants/constants");
+
+const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } = API_STATUS_CODES;
+
+const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN } = RESPONSE_MESSAGES;
+
+
 //get Cities that where sellers are Available
 const getCities = async (req, res) => {
   try {
     const result = await pool.query(getCitiesData);
-    res.status(200).json(result.rows);
+    res.status(SUCCESS).json(result.rows);
   } catch (error) {
-    res.status(200).json({ message: error });
+    res.status(SUCCESS).json({ message: error });
   }
 };
 
@@ -21,9 +28,9 @@ const getSellers = async (req, res) => {
   const { cityName } = req.params;
   try {
     const result = await pool.query(getSellersStations, [cityName]);
-    res.status(200).json(result.rows);
+    res.status(SUCCESS).json(result.rows);
   } catch (error) {
-    res.status(200).json({ message: error });
+    res.status(SUCCESS).json({ message: error });
   }
 };
 
@@ -33,9 +40,9 @@ const getFuelType = async (req, res) => {
   const { fuelType } = req.params;
   try {
     const result = await pool.query(getFuelTypeFromSellers, [fuelType]);
-    res.status(200).json(result.rows);
+    res.status(SUCCESS).json(result.rows);
   } catch (error) {
-    res.status(200).json({ message: error });
+    res.status(SUCCESS).json({ message: error });
   }
 };
 
@@ -45,23 +52,14 @@ const getFuelPrice = async (req, res) => {
   const { fuelPrice } = req.params;
   try {
     const result = await pool.query(getFuelPriceFromSellers, [fuelPrice]);
-    res.status(200).json(result.rows);
+    res.status(SUCCESS).json(result.rows);
   } catch (error) {
-    res.status(200).json({ message: error });
+    res.status(SUCCESS).json({ message: error });
   }
 };
 
 
-const {
-  API_STATUS_CODES,
-  RESPONSE_MESSAGES,
-} = require("../constants/constants");
 
-const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } =
-  API_STATUS_CODES;
-
-const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN } =
-  RESPONSE_MESSAGES;
 
 
 const signUp = async (req, res) => {
