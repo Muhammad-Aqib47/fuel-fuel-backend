@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const pool = require("../connections/postgre");
-const { sellersTableQueries } = require("../utils/sellers-queries");
-const { getSellerDetails } = sellersTableQueries;
+const { buyerTableQueries } = require("../utils/buyer-queries");
+const { getBuyerDetails } = buyerTableQueries;
 const {
   API_STATUS_CODES,
   RESPONSE_MESSAGES,
@@ -13,23 +13,18 @@ const { AUTHORIZATION_FAILED } = RESPONSE_MESSAGES;
 
 const sellerAuth = async (req, res, next) => {
   try {
-    let token = req.headers.authorization;
+    const token = req.headers.authorization?.split(" ")[1];
     if (token) {
-      token = token.split(" ")[1];
-      let payLoad = jwt.verify(token, process.env.SECRET_KEY);
-      const sellerData = await pool.query(getSellerDetails, [payLoad.seller_id]);
-      console.log(sellerData.rows[0].seller_name);
+      const payLoad = jwt.verify(token, process.env.SECRET_KEY);
+      const getAuthSellerId = payLoad.seller_id;
+      req.seller = getAuthSellerId;
       next();
     } else {
-      res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
+      return res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
     }
   } catch (error) {
-    console.log(error);
-    if (!res.headersSent) {
-      res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
-    }
+    return res.status(AUTHORIZATION_FAILED_CODE).json(AUTHORIZATION_FAILED);
   }
 };
 
 module.exports = sellerAuth;
-
