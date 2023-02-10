@@ -9,13 +9,19 @@ const {
 } = require("../constants/constants");
 const { sellersTableQueries } = require("../utils/sellers-queries");
 
-const { getAllSellers, checkExistingEmailQuery, createAccountQuery,getSellerDetails } =
-  sellersTableQueries;
+const {
+  getAllSellers,
+  checkExistingEmailQuery,
+  createAccountQuery,
+  getSellerDetails,
+  getBuyerOrdersData,
+  updateBuyerOrder
+} = sellersTableQueries;
 
 const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } =
   API_STATUS_CODES;
 
-const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN } =
+const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN, INCORRECT_API_PATH } =
   RESPONSE_MESSAGES;
 
 const getsellers = async (req, res) => {
@@ -94,4 +100,29 @@ const validateSeller = async (req, res) => {
 
 }
 
-module.exports = { getsellers, signUp, login,validateSeller };
+
+//get orders from buyers
+const getBuyerOrders = async (req, res) => {
+  try {
+    const result = await pool.query(getBuyerOrdersData);
+    res.status(SUCCESS).json(result.rows);
+  } catch (error) {
+    res.status(SUCCESS).json(INCORRECT_API_PATH);
+  }
+};
+
+//update the order from buyer
+const updateOrder = async (req, res) => {
+  const id = req.params.id;
+  const { order_status } = req.body;
+  console.log(order_status)
+  try {
+    const result = await pool.query(updateBuyerOrder, [order_status, id])
+    res.status(SUCCESS).json(result)
+  } catch (error) {
+    res.status(SUCCESS).json(INCORRECT_API_PATH)
+
+  }
+}
+
+module.exports = { getsellers, signUp, login, validateSeller, getBuyerOrders, updateOrder };

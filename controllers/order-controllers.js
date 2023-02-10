@@ -1,11 +1,12 @@
 const { buyerTableQueries } = require('../utils/order-queries')
 const { pool } = require('../connections/postgre')
 
-const { getBuyerOrderStatus, placeOrder, cancelOrder, getBuyerOrdersData, updateBuyerOrder } = buyerTableQueries
+const { getBuyerOrderStatus, placeOrder, cancelOrder } = buyerTableQueries
 
-const { API_STATUS_CODES } = require("../constants/constants");
+const { API_STATUS_CODES, RESPONSE_MESSAGES } = require("../constants/constants");
 
 const { SUCCESS } = API_STATUS_CODES;
+const { ORDER_SUCCESS, INCORRECT_API_PATH, ORDER_CANCEL } = RESPONSE_MESSAGES
 
 // Create order from buyer
 const createOrder = async (req, res) => {
@@ -13,9 +14,9 @@ const createOrder = async (req, res) => {
 
     try {
         const result = await pool.query(placeOrder, [name, selectCity, selectSeller, selectFueltype, fuelPrice, fuelQuantity, fuelDeliveryAddress, phoneNumber, selectPaymentMethod]);
-        res.status(SUCCESS).json({ message: "Your Order has been successfully done" });
+        res.status(SUCCESS).json(ORDER_SUCCESS);
     } catch (error) {
-        res.json({ message: error });
+        res.json(INCORRECT_API_PATH);
     }
 };
 
@@ -25,7 +26,7 @@ const getBuyerOrder = async (req, res) => {
         const result = await pool.query(getBuyerOrderStatus);
         res.status(SUCCESS).json(result.rows);
     } catch (error) {
-        res.status(SUCCESS).json({ message: error });
+        res.status(SUCCESS).json(INCORRECT_API_PATH);
     }
 };
 
@@ -37,32 +38,10 @@ const cancelYourOrder = async (req, res) => {
         const result = await pool.query(cancelOrder, [id]);
         res.status(SUCCESS).json(result);
     } catch (error) {
-        res.status(SUCCESS).json({ message: error })
+        res.status(SUCCESS).json(ORDER_CANCEL)
     }
 }
 
-//get orders from buyers for sellers
-const getBuyerOrders = async (req, res) => {
-    try {
-        const result = await pool.query(getBuyerOrdersData);
-        res.status(SUCCESS).json(result.rows);
-    } catch (error) {
-        res.status(SUCCESS).json({ message: 'failed' });
-    }
-};
 
-//update the order from buyer
-const updateOrder = async (req, res) => {
-    const id = req.params.id;
-    const { order_status } = req.body;
-    console.log(order_status)
-    try {
-        const result = await pool.query(updateBuyerOrder, [order_status, id])
-        res.status(SUCCESS).json(result)
-    } catch (error) {
-        res.status(SUCCESS).json({ message: error })
 
-    }
-}
-
-module.exports = { getBuyerOrder, createOrder, cancelYourOrder, getBuyerOrders, updateOrder };
+module.exports = { getBuyerOrder, createOrder, cancelYourOrder };

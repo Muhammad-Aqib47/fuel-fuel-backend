@@ -9,7 +9,7 @@ const { API_STATUS_CODES, RESPONSE_MESSAGES } = require("../constants/constants"
 
 const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } = API_STATUS_CODES;
 
-const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN } = RESPONSE_MESSAGES;
+const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN, INCORRECT_API_PATH } = RESPONSE_MESSAGES;
 
 
 //get Cities that where sellers are Available
@@ -18,7 +18,7 @@ const getCities = async (req, res) => {
     const result = await pool.query(getCitiesData);
     res.status(SUCCESS).json(result.rows);
   } catch (error) {
-    res.status(SUCCESS).json({ message: error });
+    res.status(SUCCESS).json(INCORRECT_API_PATH);
   }
 };
 
@@ -30,7 +30,7 @@ const getSellers = async (req, res) => {
     const result = await pool.query(getSellersStations, [cityName]);
     res.status(SUCCESS).json(result.rows);
   } catch (error) {
-    res.status(SUCCESS).json({ message: error });
+    res.status(SUCCESS).json(INCORRECT_API_PATH);
   }
 };
 
@@ -42,7 +42,7 @@ const getFuelType = async (req, res) => {
     const result = await pool.query(getFuelTypeFromSellers, [fuelType]);
     res.status(SUCCESS).json(result.rows);
   } catch (error) {
-    res.status(SUCCESS).json({ message: error });
+    res.status(SUCCESS).json(INCORRECT_API_PATH);
   }
 };
 
@@ -54,7 +54,7 @@ const getFuelPrice = async (req, res) => {
     const result = await pool.query(getFuelPriceFromSellers, [fuelPrice]);
     res.status(SUCCESS).json(result.rows);
   } catch (error) {
-    res.status(SUCCESS).json({ message: error });
+    res.status(SUCCESS).json(INCORRECT_API_PATH);
   }
 };
 

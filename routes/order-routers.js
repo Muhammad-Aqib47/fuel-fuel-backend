@@ -9,9 +9,6 @@ router.post('/', createOrder)
 
 router.delete('/:id', cancelYourOrder)
 
-router.get("/ordersData", getBuyerOrders);
-
-router.put("/:id", updateOrder)
 
 
 
