@@ -16,7 +16,8 @@ const RESPONSE_MESSAGES = {
   INCORRECT_API_PATH: "Incorrect API path to fetch data",
   ORDER_SUCCESS: 'Your order has been successfully done.',
   ORDER_CANCEL: 'Your Order has been canceled',
-  CREATE_QUERY: "You query has been received."
+  CREATE_QUERY: "You query has been received.",
+  ADD_FUEL: 'Fuel Type and Fuel Price Add Successfully'
 };
 
 const APP_ENVIRONMENTS = {

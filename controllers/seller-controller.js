@@ -15,13 +15,14 @@ const {
   createAccountQuery,
   getSellerDetails,
   getBuyerOrdersData,
-  updateBuyerOrder
+  updateBuyerOrder,
+  createFuelType
 } = sellersTableQueries;
 
 const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } =
   API_STATUS_CODES;
 
-const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN, INCORRECT_API_PATH } =
+const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN, INCORRECT_API_PATH, ADD_FUEL } =
   RESPONSE_MESSAGES;
 
 const getsellers = async (req, res) => {
@@ -115,7 +116,6 @@ const getBuyerOrders = async (req, res) => {
 const updateOrder = async (req, res) => {
   const id = req.params.id;
   const { order_status } = req.body;
-  console.log(order_status)
   try {
     const result = await pool.query(updateBuyerOrder, [order_status, id])
     res.status(SUCCESS).json(result)
@@ -123,6 +123,18 @@ const updateOrder = async (req, res) => {
     res.status(SUCCESS).json(INCORRECT_API_PATH)
 
   }
-}
+};
 
-module.exports = { getsellers, signUp, login, validateSeller, getBuyerOrders, updateOrder };
+//add fuel type and fuel price
+const createFuel = async (req, res) => {
+  const { seller_id, product_name, fuel_price } = req.body;
+
+  try {
+    const result = await pool.query(createFuelType, [seller_id, product_name, fuel_price]);
+    res.status(SUCCESS).json(ADD_FUEL);
+  } catch (error) {
+    res.json(INCORRECT_API_PATH);
+  }
+};
+
+module.exports = { getsellers, signUp, login, validateSeller, getBuyerOrders, updateOrder, createFuel };
