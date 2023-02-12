@@ -10,10 +10,9 @@ const { ORDER_SUCCESS, INCORRECT_API_PATH, ORDER_CANCEL } = RESPONSE_MESSAGES
 
 // Create order from buyer
 const createOrder = async (req, res) => {
-    const { name, selectCity, selectSeller, selectFueltype, fuelPrice, fuelQuantity, fuelDeliveryAddress, phoneNumber, selectPaymentMethod } = req.body;
-
+    const { name, selectCity, selectSeller, selectFueltype, fuelPrice, totalPrice, fuelQuantity, fuelDeliveryAddress, phoneNumber, selectPaymentMethod } = req.body;
     try {
-        const result = await pool.query(placeOrder, [name, selectCity, selectSeller, selectFueltype, fuelPrice, fuelQuantity, fuelDeliveryAddress, phoneNumber, selectPaymentMethod]);
+        const result = await pool.query(placeOrder, [name, selectCity, selectSeller, selectFueltype, fuelPrice, totalPrice, fuelQuantity, fuelDeliveryAddress, phoneNumber, selectPaymentMethod]);
         res.status(SUCCESS).json(ORDER_SUCCESS);
     } catch (error) {
         res.json(INCORRECT_API_PATH);
