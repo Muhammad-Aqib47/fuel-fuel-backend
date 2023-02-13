@@ -7,11 +7,11 @@ const router = express.Router();
 
 
 router.get("/s", sellerAuth, getsellers);
-router.get("/validateseller", sellerAuth, validateSeller)
-router.get("/ordersData", getBuyerOrders);
 
 router.post("/signup", signUp);
 router.post("/login", login);
+router.get("/validateseller", sellerAuth, validateSeller)
+router.get("/ordersData", getBuyerOrders);
 router.post("/addFuel", createFuel)
 
 router.put("/:id", updateOrder)

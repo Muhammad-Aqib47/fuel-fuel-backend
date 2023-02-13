@@ -12,55 +12,6 @@ const { SUCCESS, DUPLICATE_ENTRY_CODE, AUTHORIZATION_FAILED } = API_STATUS_CODES
 const { DUPLICATE_ENTRY, ACCOUNT_CREATED, INCORRECT_CREDENTIALS, LOGGED_IN, INCORRECT_API_PATH } = RESPONSE_MESSAGES;
 
 
-//get Cities that where sellers are Available
-const getCities = async (req, res) => {
-  try {
-    const result = await pool.query(getCitiesData);
-    res.status(SUCCESS).json(result.rows);
-  } catch (error) {
-    res.status(SUCCESS).json(INCORRECT_API_PATH);
-  }
-};
-
-
-// Get sellers Station according to cities
-const getSellers = async (req, res) => {
-  const { cityName } = req.params;
-  try {
-    const result = await pool.query(getSellersStations, [cityName]);
-    res.status(SUCCESS).json(result.rows);
-  } catch (error) {
-    res.status(SUCCESS).json(INCORRECT_API_PATH);
-  }
-};
-
-
-//Filter Fuel Type According to Sellers
-const getFuelType = async (req, res) => {
-  const { fuelType } = req.params;
-  try {
-    const result = await pool.query(getFuelTypeFromSellers, [fuelType]);
-    res.status(SUCCESS).json(result.rows);
-  } catch (error) {
-    res.status(SUCCESS).json(INCORRECT_API_PATH);
-  }
-};
-
-
-//get Fuel price according to Fuel type
-const getFuelPrice = async (req, res) => {
-  const { fuelPrice } = req.params;
-  try {
-    const result = await pool.query(getFuelPriceFromSellers, [fuelPrice]);
-    res.status(SUCCESS).json(result.rows);
-  } catch (error) {
-    res.status(SUCCESS).json(INCORRECT_API_PATH);
-  }
-};
-
-
-
-
 
 const signUp = async (req, res) => {
   try {
@@ -128,6 +79,53 @@ const validateBuyer = async (req, res) => {
   }
 
 }
+
+//get Cities that where sellers are Available
+const getCities = async (req, res) => {
+  try {
+    const result = await pool.query(getCitiesData);
+    res.status(SUCCESS).json(result.rows);
+  } catch (error) {
+    res.status(SUCCESS).json(INCORRECT_API_PATH);
+  }
+};
+
+
+// Get sellers Station according to cities
+const getSellers = async (req, res) => {
+  const { cityName } = req.params;
+  try {
+    const result = await pool.query(getSellersStations, [cityName]);
+    res.status(SUCCESS).json(result.rows);
+  } catch (error) {
+    res.status(SUCCESS).json(INCORRECT_API_PATH);
+  }
+};
+
+
+//Filter Fuel Type According to Sellers
+const getFuelType = async (req, res) => {
+  const { fuelType } = req.params;
+  try {
+    const result = await pool.query(getFuelTypeFromSellers, [fuelType]);
+    res.status(SUCCESS).json(result.rows);
+  } catch (error) {
+    res.status(SUCCESS).json(INCORRECT_API_PATH);
+  }
+};
+
+
+//get Fuel price according to Fuel type
+const getFuelPrice = async (req, res) => {
+  const { fuelPrice } = req.params;
+  try {
+    const result = await pool.query(getFuelPriceFromSellers, [fuelPrice]);
+    res.status(SUCCESS).json(result.rows);
+  } catch (error) {
+    res.status(SUCCESS).json(INCORRECT_API_PATH);
+  }
+};
+
 
 
 module.exports = { getCities, getSellers, getFuelType, getFuelPrice, signUp, login, validateBuyer };

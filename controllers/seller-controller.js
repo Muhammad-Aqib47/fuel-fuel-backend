@@ -33,6 +33,7 @@ const getsellers = async (req, res) => {
     throw error;
   }
 };
+
 const signUp = async (req, res) => {
   try {
     const { name, email, phone, password } = req.body;
