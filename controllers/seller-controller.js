@@ -60,7 +60,6 @@ const signUp = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(">>>>>>>>>>>>>>>>", req.body);
 
     const userFind = await pool.query(checkExistingEmailQuery, [email]);
     if (userFind.rows.length == 0) {
@@ -73,7 +72,6 @@ const login = async (req, res) => {
     if (hashedPassword === false) {
       res.json({ message: INCORRECT_CREDENTIALS });
     } else {
-      console.log(userFind.rows[0]);
       const foundId = userFind.rows[0].seller_id;
 
       const token = jsonwebtoken.sign({ seller_id: foundId }, SECRET_KEY, {
